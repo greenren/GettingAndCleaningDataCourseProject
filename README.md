@@ -51,18 +51,31 @@ tidy data set: "angletBodyAccMeangravity", "angletBodyAccJerkMeangravityMean", "
 "angleYgravityMean", "angleZgravityMean".
 
 ##3. Use descriptive activity names to name the activities in the data set
-In this step the labels for the different activities, which can be found in the 'activity_labels.txt',
-are 
+In this step the labels for the different activities, which can be found in the 'activity_labels.txt' file,
+are mapped onto the numerical coding of the 'activity' variable. In this way, the column now shows the different
+labels of the activities as strings.
 
 ##4. Label the data with descriptive variable names
 This step has already been completed when loading the datasets in step 1.
 
 
 ##5. Create the tidy data set with the average of each variable for each activity and each subject
+In the last step, the reshape2 package is used to first melt the dataset using the 'activity' 
+and 'subject' variables as ids (Note that for this step the reshape2 package should be installed already):
+
+```R
+dataset_melt <- melt(dataset_sub, id=c('activity', 'subject'))
+```
+Then the dataset is recast, calculating the mean for each variable for each activity and each subject:
+```R
+tidy_data <- dcast(dataset_melt, activity + subject ~ variable, mean)
+```
+The result is a dataframe with 180 rows (6 activities * 30 subjects)
 
 
+This tidy data set is then saved as 'tidy_data.txt' in the working directory.
 
-Finally, to load and view the data in R, run this code:
+Finally, to load and view the tidy data set in R, run this code:
 
 ```R
 data <- read.table("tidy_data.txt", header = TRUE) 
