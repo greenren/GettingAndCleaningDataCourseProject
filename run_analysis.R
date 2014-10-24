@@ -1,15 +1,12 @@
-# 0. SETTING UP DATA DIRECTORY AND DOWNLOAD DATASET
-
-# Create data directory if it doesn't exist
-if(!file.exists("data")) {
-    dir.create("data")
-}
+# 0. DOWNLOAD AND EXTRACT DATA SET
 
 # Downloading and extracting Dataset.zip
-file_url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-download.file(file_url, destfile = "./data/temp.zip", method = "curl")
-unzip('./data/temp.zip', exdir="./data")
-unlink('/data/temp.zip')
+if (!"UCI HAR Dataset" %in% dir()){
+    file_url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+    download.file(file_url, destfile = "./temp.zip", method = "curl")
+    unzip('./temp.zip', exdir="./")
+    unlink('/temp.zip')
+}
 
 
 
@@ -17,26 +14,26 @@ unlink('/data/temp.zip')
 
 # (4. LABEL THE DATA WITH DESCRIPTIVE VARIABLE NAMES)
 # Load the different feature names (to be used as variable names in the columns)
-features <- read.table('./data/UCI HAR Dataset//features.txt', sep="", col.names=c('index', 'features'))
+features <- read.table('./UCI HAR Dataset//features.txt', sep="", col.names=c('index', 'features'))
 # Remove punctuation from the feature names, to make it R appropriate
 features$features <- gsub("[[:punct:]]", "", features$features)
 
 # Load test set data and train data and merge into one dataframe (using rbind)
-test_set <- read.table('./data/UCI HAR Dataset//test/X_test.txt', sep="", col.names=features$features)
-train_set <- read.table('./data/UCI HAR Dataset//train/X_train.txt', sep="", col.names=features$features)
+test_set <- read.table('./UCI HAR Dataset//test/X_test.txt', sep="", col.names=features$features)
+train_set <- read.table('./UCI HAR Dataset//train/X_train.txt', sep="", col.names=features$features)
 dataset <- rbind(test_set, train_set)
 
 # Load subject data for the test and train sets, merge them into one column (using rbind) 
 # and add to the larger data frame
-test_set_subject <- read.table('./data/UCI HAR Dataset//test/subject_test.txt', sep="")
-train_set_subject <- read.table('./data/UCI HAR Dataset//train/subject_train.txt', sep="")
+test_set_subject <- read.table('./UCI HAR Dataset//test/subject_test.txt', sep="")
+train_set_subject <- read.table('./UCI HAR Dataset//train/subject_train.txt', sep="")
 subject <- rbind(test_set_subject, train_set_subject)
 dataset$subject <- unlist(subject)    # Unlisted to make sure it remains an atomic vector column (instead of a data.frame)
 
 # Load activity data for the test and train sets, merge them into one column (using rbind) 
 # and add to the larger data frame
-test_set_activity <- read.table('./data/UCI HAR Dataset//test/Y_test.txt', sep="")
-train_set_activity <- read.table('./data/UCI HAR Dataset//train/Y_train.txt', sep="")
+test_set_activity <- read.table('./UCI HAR Dataset//test/Y_test.txt', sep="")
+train_set_activity <- read.table('./UCI HAR Dataset//train/Y_train.txt', sep="")
 activity <- rbind(test_set_activity, train_set_activity)
 dataset$activity <- activity
 
@@ -57,7 +54,7 @@ dataset_sub <- dataset[, column_variables]
 # 3. USE DESCRIPTIVE ACTIVITY NAMES TO NAME THE ACTIVITIES IN THE DATA SET
 
 # Load the activity labels from activity_labels.txt and put the labels in a vector
-activity_labels <- read.table('./data/UCI HAR Dataset//activity_labels.txt', sep="", col.names=c('num', 'activity_labels'))
+activity_labels <- read.table('./UCI HAR Dataset//activity_labels.txt', sep="", col.names=c('num', 'activity_labels'))
 labels <- activity_labels$activity_labels
 # With sapply transform the numbers in the activity column to the activity names
 dataset_sub$activity <- sapply(dataset_sub$activity, function(x){labels[x]})
@@ -81,8 +78,3 @@ tidy_data <- dcast(dataset_melt, activity + subject ~ variable, mean)
 
 # Save the tidy dataset in a text file without row.names
 write.table(tidy_data, file="tidy_data.txt", row.names=FALSE)
-
-
-
-
-
