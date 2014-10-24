@@ -32,6 +32,10 @@ all the (mean and standard deviation) measurements of the different variables fo
 The units for the different variable are, however, the same as in the original data set.
 So variables with a 't-' prefix denote time and variables with an 'f-' prefix denote frequency (applying a Fast Fourier Transform to time).
 
+###Units
+Features in the original data set are normalized and bounded within [-1,1] and likewise the units in the tidy data set. 
+
+Presumably, the original units were seconds and hertz (hz) for the variables with a 't-' and 'f-' prefix, respectively.
 
 ###Summary statistics for variables in the tidy data set
 **activity**
