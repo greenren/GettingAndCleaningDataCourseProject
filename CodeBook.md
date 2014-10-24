@@ -34,7 +34,6 @@ So variables with a 't-' prefix denote time and variables with an 'f-' prefix de
 
 ###Units
 Features in the original data set are normalized and bounded within [-1,1] and likewise the units in the tidy data set. 
-
 Presumably, the original units were seconds and hertz (hz) for the variables with a 't-' and 'f-' prefix, respectively.
 
 ###Summary statistics for variables in the tidy data set
