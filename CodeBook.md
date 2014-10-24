@@ -33,10 +33,11 @@ The units for the different variable are, however, the same as in the original d
 So variables with a 't-' prefix denote time and variables with an 'f-' prefix denote frequency (applying a Fast Fourier Transform to time).
 
 
-###Specific variables
+###Summary statistics for variables in the tidy data set
 **activity**
 
-WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING
+The activity variable denotes the activity the subject undertook while the measurement was being made.
+Its values are WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING
 
 **subject**
 
