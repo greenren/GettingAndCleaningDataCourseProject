@@ -19,7 +19,7 @@ unlink('/data/temp.zip')
 # Load the different feature names (to be used as variable names in the columns)
 features <- read.table('./data/UCI HAR Dataset//features.txt', sep="", col.names=c('index', 'features'))
 # Remove punctuation from the feature names, to make it R appropriate
-features <- gsub("[[:punct:]]", "", features$features)
+features$features <- gsub("[[:punct:]]", "", features$features)
 
 # Load test set data and train data and merge into one dataframe (using rbind)
 test_set <- read.table('./data/UCI HAR Dataset//test/X_test.txt', sep="", col.names=features$features)
@@ -31,7 +31,7 @@ dataset <- rbind(test_set, train_set)
 test_set_subject <- read.table('./data/UCI HAR Dataset//test/subject_test.txt', sep="")
 train_set_subject <- read.table('./data/UCI HAR Dataset//train/subject_train.txt', sep="")
 subject <- rbind(test_set_subject, train_set_subject)
-dataset$subject <- subject
+dataset$subject <- unlist(subject)    # Unlisted to make sure it remains an atomic vector column (instead of a data.frame)
 
 # Load activity data for the test and train sets, merge them into one column (using rbind) 
 # and add to the larger data frame
@@ -69,6 +69,18 @@ dataset_sub$activity <- sapply(dataset_sub$activity, function(x){labels[x]})
 # Also removed punctuation from the column names to make them suitable for R.
 
 
+
+# 5. CREATE A SECOND, TIDY DATA SET WITH THE AVERAGE OF EACH VARIABLE FOR EACH ACTIVITY AND EACH SUBJECT
+
+# Reshape the data by
+# First melting the data, using the activity and subject columns as ids
+library(reshape2)
+dataset_melt <- melt(dataset_sub, id=c('activity', 'subject'))
+# Second casting the data for each activity and for each subject, calculating the mean for each variable
+tidy_data <- dcast(dataset_melt, activity + subject ~ variable, mean)
+
+# Save the tidy dataset in a text file without row.names
+write.table(tidy_data, file="tidy_data.txt", row.names=FALSE)
 
 
 
